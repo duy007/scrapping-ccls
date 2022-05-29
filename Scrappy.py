@@ -22,7 +22,8 @@ class Scrap:
 
     def getGrade(self, soup):
         grade = ""
-        head = soup.find("h1").string.split(" » ")
+        headText = soup.find("h1").text
+        head = headText.split(" » ")
         if len(head) > 2:
             grade = head[2][6:] 
         else:
@@ -33,16 +34,17 @@ class Scrap:
         return grade
 
     def getDomain(self, soup):
-        return soup.find("h1").string.split(" » ")[1]
+        head = soup.find("h1").text
+        return head.split(" » ")[1]
 
     def isEla(self, soup):
-        return len(soup.find("h1").string.split(" » ")) > 2
+        return len(soup.find("h1").text.split(" » ")) > 2
 
     def getSub(self, soup, grade, domain, substandards):
         topics = soup.find_all("h4")
         for topic in topics:
             sib = topic.next_sibling
-            while(sib.name != 'h4' and sib.string != "\n"):
+            while(sib.name != 'h4' and sib.text != "\n" and sib.text != " "):
                 if("substandard" in sib['class']):
                         code = ""
                         desc = ""
